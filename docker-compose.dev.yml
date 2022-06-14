@@ -1,0 +1,28 @@
+version: "3"
+services:
+  redis:
+    image: 'redis:latest'
+    volumes:
+      - ./data:/data
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    depends_on:
+      - redis
+      - nginx
+    restart: unless-stopped
+
+  home:
+    build: ./home
+    depends_on:
+      - nginx
+      - api
+    restart: unless-stopped
+networks:
+  backend:

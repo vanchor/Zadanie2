@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS Calc</title>
+</head>
+
+<body>
+    <form id="calcForm" action="/api/gs_calc" method="GET">
+        <input type="text" name="a" placeholder="a1">
+        <input type="text" name="q" placeholder="q">
+        <input type="text" name="n" placeholder="n">
+        <br>
+        <input type="submit" value="Calculate">
+    </form>
+    <p>Result: <p id="result">0</p></p>
+
+    <nav>
+        <a href="/">
+            <h4>Go back home</h4>
+        </a>
+    </nav>
+</body>
+
+<script>
+    document.getElementById("calcForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        fetch("/api/gs_calc?" + new URLSearchParams({
+            a: e.currentTarget.a.value,
+            q: e.currentTarget.q.value,
+            n: e.currentTarget.n.value,
+        })).then(async data => {
+            const response = await data.json();
+            document.getElementById("result").innerHTML = response.result;
+        }).catch(e => {
+            console.log(e);
+        })
+    });
+</script>
+
+</html>
